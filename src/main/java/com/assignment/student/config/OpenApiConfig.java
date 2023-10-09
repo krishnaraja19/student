@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI schoolMicroserviceOpenAPI() {
+    public OpenAPI studentMicroserviceOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("Student Management")
                         .description("You can able to manage student data here....")

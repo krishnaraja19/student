@@ -1,6 +1,10 @@
 package com.assignment.student.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.HashSet;
@@ -16,8 +20,16 @@ public class Student {
     @Id
     @GeneratedValue
     private Long id;
+
+    @NotBlank
+    @Size(min = 0, max = 30)
     private String firstName;
+    @NotBlank
+    @Size(min = 0, max = 30)
     private String lastName;
+
+    @Min(16)
+    @Max(58)
     private int age;
 
     @ManyToMany(cascade = CascadeType.ALL)
