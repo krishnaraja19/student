@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.slf4j.Logger;
@@ -22,8 +24,11 @@ public class StudentController {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentController.class);
 
+    private final StudentService studentService;
     @Autowired
-    StudentService studentService;
+    public StudentController(StudentService studentService){
+        this.studentService = studentService;
+    }
 
     @Operation(summary = "Create a new student")
     @ApiResponses(value = {
@@ -33,16 +38,28 @@ public class StudentController {
     })
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Student createStudent(@RequestBody Student student){
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student){
+
         logger.info("Create student request initiated..");
-        return studentService.saveStudent(student);
+        //Creating student here
+        Student createdStudent =  studentService.saveStudent(student);
+
+        // Return the created Student with a 201 Created status
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudent);
     }
 
     @Operation(summary = "Get a list of all students")
     @GetMapping("/")
-    public List<Student> getAllStudents() {
+    public ResponseEntity<List<Student>> getAllStudents() {
         logger.info("Get all student request initiated..");
-        return studentService.getAllStudent();
+
+        List<Student> students = studentService.getAllStudent();
+
+        if (!students.isEmpty()) {
+            return ResponseEntity.ok(students); // 200 OK with a list of students
+        } else {
+            return ResponseEntity.noContent().build(); // 204 No Content if no students are found
+        }
     }
 
     @Operation(summary = "Get a student by ID")
@@ -53,9 +70,12 @@ public class StudentController {
             @ApiResponse(responseCode = "404", description = "Student not found")
     })
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         logger.info("Get student by id request initiated..");
-        return studentService.getStudentById(id);
+
+        Student student = studentService.getStudentById(id);
+
+        return ResponseEntity.ok(student);
     }
 
     @Operation(summary = "Update a student by ID")
@@ -66,9 +86,11 @@ public class StudentController {
             @ApiResponse(responseCode = "404", description = "Student not found")
     })
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id,@RequestBody Student updateStudent) {
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id,@Valid @RequestBody Student student) {
         logger.info("Update student request initiated..");
-        return studentService.updateStudent(id,updateStudent);
+
+        Student updatedStudent = studentService.updateStudent(id, student);
+        return ResponseEntity.ok(updatedStudent);
     }
 
     @Operation(summary = "Delete a student by ID")
@@ -77,14 +99,14 @@ public class StudentController {
             @ApiResponse(responseCode = "404", description = "Student not found")
     })
     @DeleteMapping("/{id}")
-    public String deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<String> deleteStudent(@PathVariable Long id) {
 
         logger.info("Delete student request initiated..");
 
         studentService.deleteStudent(id);
         logger.info("Student with {} deleted successfully",id);
 
-        return "Student with ID "+id+" deleted successfully.";
+        return ResponseEntity.ok("Student with ID "+id+" deleted successfully.");
 
     }
 }

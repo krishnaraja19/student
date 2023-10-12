@@ -1,10 +1,7 @@
 package com.assignment.student.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.HashSet;
@@ -21,13 +18,15 @@ public class Student {
     @GeneratedValue
     private Long id;
 
-    @NotBlank
+    @NotEmpty(message = "Please provide a first name")
     @Size(min = 0, max = 30)
     private String firstName;
-    @NotBlank
+
+    @NotEmpty(message = "Please provide a last name")
     @Size(min = 0, max = 30)
     private String lastName;
 
+    @NotNull(message = "Please provide a age")
     @Min(16)
     @Max(58)
     private int age;
