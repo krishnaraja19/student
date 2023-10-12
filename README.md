@@ -23,7 +23,7 @@
 2. Install Java 17
 3. There is no need to install a database because this project
    is integrated with spring-boot docker-compose.
-   It will take the necessary db properties from the docker-compose.yml file.
+   It will take the necessary db properties from the docker-compose.yml file. And Automatically pulled the database into the Local DockerDesktop.
 4. Once the first three step is finished. 
    Please open this project By IntelliJ IDE or any IDE is fine.
 5. Please run the main Java class in this project. The class name is StudentApplication.java file.
