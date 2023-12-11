@@ -15,8 +15,13 @@ import java.util.List;
 public class StudentServiceImplementation implements StudentService {
 
     private static final Logger logger = LoggerFactory.getLogger(StudentServiceImplementation.class);
-    @Autowired
+
     StudentRepository studentRepository;
+
+    @Autowired
+    public StudentServiceImplementation(StudentRepository studentRepository){
+        this.studentRepository = studentRepository;
+    }
 
     @Override
     public Student saveStudent(Student student) {

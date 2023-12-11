@@ -55,11 +55,10 @@ public class StudentController {
 
         List<Student> students = studentService.getAllStudent();
 
-        if (!students.isEmpty()) {
-            return ResponseEntity.ok(students); // 200 OK with a list of students
-        } else {
+        if (students.isEmpty()) {
             return ResponseEntity.noContent().build(); // 204 No Content if no students are found
         }
+        return ResponseEntity.ok(students); // 200 OK with a list of students
     }
 
     @Operation(summary = "Get a student by ID")
